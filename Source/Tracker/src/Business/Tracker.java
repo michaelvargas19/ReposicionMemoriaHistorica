@@ -103,7 +103,7 @@ public class Tracker {
                 
                 
             }
-            new StartConnection(this);
+            
             System.out.println(mapFiles.toString()+"----");
             home.updateFiles(mapFiles);
             
@@ -197,7 +197,9 @@ public class Tracker {
     }
     
     
-    
+    public void startClients(){
+        new StartConnection(this);
+    }
     
     
     

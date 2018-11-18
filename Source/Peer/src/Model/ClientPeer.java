@@ -10,6 +10,8 @@ import Model.*;
 import RMI.InterfaceAddresses;
 import RMI.InterfaceRegistry;
 import RemoteObjects.RunTimeImplements;
+import Threads.DirectionsConnection;
+import Threads.DownloadConnection;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.rmi.NotBoundException;
@@ -33,11 +35,13 @@ public class ClientPeer {
     private String ipLocal;
     private List<File> files;
     private Registry myRegistry;
+    private String ipServer;
 
     public ClientPeer(Home home) throws RemoteException{
         this.home = home;
         this.files = new ArrayList<File>();
         try {
+            this.ipServer = "127.0.0.1";
             this.ipLocal = getLocalIp();
         } catch (java.net.UnknownHostException ex) {
             Logger.getLogger(ClientPeer.class.getName()).log(Level.SEVERE, null, ex);
@@ -99,20 +103,7 @@ public class ClientPeer {
     }
     
     
-    public List<Peer> getDirectionsToFile(String nameFile) throws RemoteException, NotBoundException, Exception{
-    
-        Registry myRegistry = LocateRegistry.getRegistry("127.0.0.1",777); 
-        InterfaceAddresses interAddress = (InterfaceAddresses) myRegistry.lookup("Addresses");
-    
-        List<File> fls = new ArrayList<File>();
-        
-        for(File f : files){
-            fls.add(new File(f.getName(), f.getState()));
-        }
-        
-           return interAddress.addressesToFile(nameFile);
-        
-    }
+   
     
     private void uploadFiles(){
     
@@ -142,11 +133,11 @@ public class ClientPeer {
     private void answerRequest(){
         
         try {
+          
+             new DirectionsConnection(new ArrayList<>(), ipServer)
+                    //System.out.println(getDirectionsToFile("file1").toString()+"RunTime xd xd ");
+;
             
-            System.out.println(getDirectionsToFile("file1").toString()+"RunTime xd xd ");
-            
-        } catch (NotBoundException ex) {
-            Logger.getLogger(ClientPeer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(ClientPeer.class.getName()).log(Level.SEVERE, null, ex);
         }
