@@ -9,7 +9,10 @@ import GUI.Home;
 import Model.*;
 import RMI.InterfaceAddresses;
 import RMI.InterfaceRegistry;
+import RemoteObjects.FileImplements;
 import RemoteObjects.RunTimeImplements;
+import Threads.DirectionsConnection;
+import Threads.DownloadConnection;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.rmi.NotBoundException;
@@ -18,7 +21,9 @@ import java.rmi.UnknownHostException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -33,17 +38,19 @@ public class ClientPeer {
     private String ipLocal;
     private List<File> files;
     private Registry myRegistry;
+    private String ipServer;
 
     public ClientPeer(Home home) throws RemoteException{
         this.home = home;
         this.files = new ArrayList<File>();
         try {
+            this.ipServer = "127.0.0.1";
             this.ipLocal = getLocalIp();
         } catch (java.net.UnknownHostException ex) {
             Logger.getLogger(ClientPeer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        uploadFiles(); 
         
-        init();
     }
     
     //-------------------------------------------------------------------------------------------------
@@ -77,9 +84,16 @@ public class ClientPeer {
             fls.add(new File(f.getName(), f.getState()));
         }
         
-        
+            Map<Integer,Piece> pieces = new HashMap<>();
+            
+            pieces.put(0,new Piece("piece0"));
+            pieces.put(1,new Piece("piece1"));
+            pieces.put(2,new Piece("piece2"));
+                
             File f = new File();
             f.setName("file1");
+            f.setPieces(pieces);
+            
             Register r = new Register();
             r.setFiles(fls);
             r.setTypeRegister(enumTypeRegister.REGISTER);
@@ -99,22 +113,9 @@ public class ClientPeer {
     }
     
     
-    public List<Peer> getDirectionsToFile(String nameFile) throws RemoteException, NotBoundException, Exception{
+   
     
-        Registry myRegistry = LocateRegistry.getRegistry("127.0.0.1",777); 
-        InterfaceAddresses interAddress = (InterfaceAddresses) myRegistry.lookup("Addresses");
-    
-        List<File> fls = new ArrayList<File>();
-        
-        for(File f : files){
-            fls.add(new File(f.getName(), f.getState()));
-        }
-        
-           return interAddress.addressesToFile(nameFile);
-        
-    }
-    
-    private void uploadFiles(){
+    private void uploadFiles() throws RemoteException{
     
         File f = new File();
         f.setName("file1");
@@ -130,8 +131,10 @@ public class ClientPeer {
         f.setName("file3");
         f.setState(enumStateFile.INCOMPLETE);
         this.files.add(f);
-        
+        init();
         home.updateFiles(files);
+        
+        
         
     }
     
@@ -143,10 +146,24 @@ public class ClientPeer {
         
         try {
             
-            System.out.println(getDirectionsToFile("file1").toString()+"RunTime xd xd ");
+            Map<Integer,Piece> pieces = new HashMap<>();
             
-        } catch (NotBoundException ex) {
-            Logger.getLogger(ClientPeer.class.getName()).log(Level.SEVERE, null, ex);
+            pieces.put(0,new Piece("piece0"));
+            pieces.put(1,new Piece("piece1"));
+            pieces.put(2,new Piece("piece2"));
+                
+            File f = new File();
+            f.setName("file1");
+            f.setPieces(pieces);
+            
+            List<File> fls = new ArrayList<>();
+
+            fls.add(f);
+            
+             new DirectionsConnection(fls, ipServer,this)
+                    //System.out.println(getDirectionsToFile("file1").toString()+"RunTime xd xd ");
+;
+            
         } catch (Exception ex) {
             Logger.getLogger(ClientPeer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -155,8 +172,14 @@ public class ClientPeer {
     private void init() throws RemoteException{
         myRegistry = LocateRegistry.createRegistry(888); 
         myRegistry.rebind("RunTime", new RunTimeImplements(this));
-        System.out.println("Client Interface On...!!!");
-        uploadFiles();    
+        
+        for(File f : this.files){    
+            myRegistry.rebind("File"+f.getName(), new FileImplements(this));
+            System.out.println("Client Interface F"+f.getName()+" On...!!!");
+            
+        }
+        
+        
     }
 
     public List<File> getFiles() {
@@ -165,6 +188,14 @@ public class ClientPeer {
 
     public void setFiles(List<File> files) {
         this.files = files;
+    }
+
+    public String getIpServer() {
+        return ipServer;
+    }
+
+    public void setIpServer(String ipServer) {
+        this.ipServer = ipServer;
     }
     
     

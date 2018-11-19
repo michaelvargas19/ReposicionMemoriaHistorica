@@ -9,7 +9,7 @@ import GUI.Home;
 import Model.*;
 import Model.enumStateUser;
 import RemoteObjects.AddressesImplements;
-import RemoteObjects.FileImplements;
+
 import java.rmi.*;
 import RemoteObjects.RegistryImplements;
 
@@ -52,7 +52,7 @@ public class Tracker {
             
             
             myRegistry.rebind("Addresses", new AddressesImplements(this));
-            myRegistry.rebind("File", new FileImplements(this));
+
             myRegistry.rebind("Registry", new RegistryImplements(this));
             
             
@@ -103,7 +103,7 @@ public class Tracker {
                 
                 
             }
-            new StartConnection(this);
+            
             System.out.println(mapFiles.toString()+"----");
             home.updateFiles(mapFiles);
             
@@ -184,6 +184,7 @@ public class Tracker {
         }
             
     }
+        System.out.println("Directions had sended to File -->> "+nameFile);
         return peers;
     }
     
@@ -197,7 +198,9 @@ public class Tracker {
     }
     
     
-    
+    public void startClients(){
+        new StartConnection(this);
+    }
     
     
     

@@ -32,6 +32,7 @@ public class RunTimeImplements extends UnicastRemoteObject implements InterfaceR
 
     @Override
     public boolean inOnLine() throws Exception {
+        System.out.println("Online...");
         return true;
     }
     

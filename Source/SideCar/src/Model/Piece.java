@@ -17,6 +17,10 @@ public class Piece implements Serializable{
     private enumStateFile state;
     private Double percentage;
 
+    public Piece(String data){
+        this.data = data;
+        this.state = enumStateFile.INCOMPLETE;
+    }
     
     public String getData() {
         return data;

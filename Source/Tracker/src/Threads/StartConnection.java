@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  *
  * @author Michael
@@ -40,9 +41,9 @@ public class StartConnection extends Thread{
     public void run() {
         Registry myRegistry; 
         try {
-            System.out.println("Durmió -----");
-            Thread.sleep(10000);
-            System.out.println("Despertó -----");
+            //System.out.println("Durmió -----");
+            Thread.sleep(3000);
+            //System.out.println("Despertó -----");
             for (Map.Entry<Peer, enumStateSwarm> entry : tracker.getSwarm().entrySet()) {
                 System.out.println(entry.getKey().getIp());
                 myRegistry = LocateRegistry.getRegistry(entry.getKey().getIp(),888);
@@ -50,7 +51,7 @@ public class StartConnection extends Thread{
                 
                 interRunTime.start();    
             }
-            
+          System.out.println("Clients Started -----");  
             
             
             

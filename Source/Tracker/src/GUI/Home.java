@@ -59,6 +59,7 @@ public class Home extends java.awt.Frame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -103,6 +104,15 @@ public class Home extends java.awt.Frame {
         jLayeredPane1.add(jLabel1);
         jLabel1.setBounds(30, 10, 34, 14);
 
+        jButton1.setText("Start Clients");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jLayeredPane1.add(jButton1);
+        jButton1.setBounds(263, 240, 110, 23);
+
         jTabbedPane2.addTab("tab2", jLayeredPane1);
 
         add(jTabbedPane2, java.awt.BorderLayout.CENTER);
@@ -117,6 +127,10 @@ public class Home extends java.awt.Frame {
         System.exit(0);
     }//GEN-LAST:event_exitForm
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        startClients();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -130,6 +144,7 @@ public class Home extends java.awt.Frame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -185,6 +200,9 @@ public class Home extends java.awt.Frame {
         }
     }
 
+    private void startClients(){
+        this.tracker.startClients();
+    }
 
 }
 

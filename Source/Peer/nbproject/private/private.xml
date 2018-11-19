@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Michael/Documents/NetBeansProjects/Peer/src/GUI/Home.java</file>
-            <file>file:/C:/Users/Michael/Documents/NetBeansProjects/Peer/src/Model/ClientPeer.java</file>
+            <file>file:/C:/Users/Michael/Documents/NetBeansProjects/Peer/src/RemoteObjects/FileImplements.java</file>
+            <file>file:/C:/Users/Michael/Documents/NetBeansProjects/Peer/src/Threads/DirectionsConnection.java</file>
+            <file>file:/C:/Users/Michael/Documents/NetBeansProjects/Peer/src/Threads/DownloadPieceConnection.java</file>
+            <file>file:/C:/Users/Michael/Documents/NetBeansProjects/Peer/src/RemoteObjects/RunTimeImplements.java</file>
+            <file>file:/C:/Users/Michael/Documents/NetBeansProjects/Peer/src/Threads/DownloadConnection.java</file>
         </group>
     </open-files>
 </project-private>
