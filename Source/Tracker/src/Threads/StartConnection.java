@@ -9,6 +9,7 @@ import Business.Tracker;
 import Model.Peer;
 import Model.enumStateSwarm;
 import RMI.InterfaceAddresses;
+import RMI.InterfaceFile;
 import RMI.InterfaceRunTime;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
@@ -47,11 +48,13 @@ public class StartConnection extends Thread{
             for (Map.Entry<Peer, enumStateSwarm> entry : tracker.getSwarm().entrySet()) {
                 System.out.println(entry.getKey().getIp());
                 myRegistry = LocateRegistry.getRegistry(entry.getKey().getIp(),888);
+          System.out.println("Client Started ------>"+entry.getKey().getIp());  
                 InterfaceRunTime interRunTime = (InterfaceRunTime) myRegistry.lookup("RunTime");
+               // InterfaceFile interfaceFile = (InterfaceFile) myRegistry.lookup("File");
                 
                 interRunTime.start();    
+                //interfaceFile.
             }
-          System.out.println("Clients Started -----");  
             
             
             

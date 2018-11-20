@@ -4,9 +4,11 @@
  * and open the template in the editor.
  */
 package RemoteObjects;
-
-import Business.Tracker;
+;
+import Model.ClientPeer;
 import Model.Piece;
+import Model.enumStateFile;
+import utils.Utils;
 import RMI.InterfaceAddresses;
 import RMI.InterfaceFile;
 import java.rmi.RemoteException;
@@ -18,16 +20,21 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class FileImplements extends UnicastRemoteObject implements InterfaceFile {
 
-    private Tracker tracker;
+    private ClientPeer tracker;
     
-    public FileImplements (Tracker tracker) throws RemoteException{
+    public FileImplements (ClientPeer tracker) throws RemoteException{
         super();
         this.tracker = tracker;
     }
     
     @Override
     public Piece downloadPiece(String nameFile, int n) throws Exception {
-        return new Piece();
+       String d=Utils.readClientFile(nameFile+".txt").get(n-1);
+       Piece p=new Piece();
+       p.setData(d);
+       p.setPercentage(100.0);
+       p.setState(enumStateFile.COMPLETE);
+        return p;
     }
 
     @Override

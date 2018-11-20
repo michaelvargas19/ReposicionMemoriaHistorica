@@ -24,6 +24,7 @@ public class RunTimeConnection implements Runnable{
     
     @Override
     public void run() {
+        System.out.println(" no haga nada xddd");
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

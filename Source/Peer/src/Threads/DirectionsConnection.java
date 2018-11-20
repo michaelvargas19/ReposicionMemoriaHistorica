@@ -34,7 +34,7 @@ public class DirectionsConnection extends Thread{
     
        public void run() {
         try {
-            
+           // System.out.println("corriendo directions conections");
             System.out.println(getDirectionsToFile("file1").toString());
             
         } catch (NotBoundException ex) {

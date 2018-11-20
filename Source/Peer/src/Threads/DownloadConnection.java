@@ -5,11 +5,15 @@
  */
 package Threads;
 
+import Model.ClientPeer;
 import Model.File;
 import Model.Peer;
 import Model.Piece;
+import utils.Utils;
+
 import Model.enumStateSwarm;
 import RMI.InterfaceAddresses;
+import RMI.InterfaceFile;
 import RMI.InterfaceRunTime;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -31,8 +35,18 @@ public class DownloadConnection extends Thread{
     public DownloadConnection(Peer p, List<Piece> pieces){
         this.peer = p;
         this.pieces = pieces;
-        this.start();
+        
     }
+    private ClientPeer mipeer;
+
+    public ClientPeer getMipeer() {
+        return mipeer;
+    }
+
+    public void setMipeer(ClientPeer mipeer) {
+        this.mipeer = mipeer;
+    }
+    
     
 @Override
     public void run() {
@@ -44,11 +58,11 @@ public class DownloadConnection extends Thread{
             //System.out.println("Despertó -----");
             
                 System.out.println("Thread had downloaded");
-                /*
-                myRegistry = LocateRegistry.getRegistry(entry.getKey().getIp(),888);
+                
+                myRegistry = LocateRegistry.getRegistry(peer.getIp(),888);
                 InterfaceRunTime interRunTime = (InterfaceRunTime) myRegistry.lookup("RunTime");
                 
-                interRunTime.start();   */ 
+                interRunTime.start();    
             
         }catch(Exception e){
         }
@@ -56,6 +70,13 @@ public class DownloadConnection extends Thread{
         
     }    
     
-    
+        public String download(String nameFile,int linea) throws RemoteException, NotBoundException, Exception {
+                Registry myRegistry = LocateRegistry.getRegistry(peer.getIp(),888); 
+      InterfaceFile interFile = (InterfaceFile) myRegistry.lookup("File");
+            Piece p=interFile.downloadPiece(nameFile, linea);
+               
+            return p.getData();
+    }
+ 
         
 }

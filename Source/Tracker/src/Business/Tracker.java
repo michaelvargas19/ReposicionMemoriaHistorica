@@ -70,7 +70,7 @@ public class Tracker {
         
         Peer peer = new Peer();
         peer.setIp(register.getIpClient());
-              
+        
            
         for (Map.Entry<Peer, enumStateSwarm> entry : swarm.entrySet()) {
             peers.add(entry.getKey());
@@ -173,7 +173,7 @@ public class Tracker {
     
 
     public List<Peer> getPeersToFile(String nameFile){
-        
+    //balancear carga    
     List<Peer> peers = new ArrayList<Peer> ();
     for (Map.Entry<String, Map<Peer,enumStateUser> > entry : mapFiles.entrySet()) {
         if(entry.getKey().compareTo(nameFile) == 0)

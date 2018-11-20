@@ -9,6 +9,7 @@ import GUI.Home;
 import Model.*;
 import RMI.InterfaceAddresses;
 import RMI.InterfaceRegistry;
+import RemoteObjects.FileImplements;
 import RemoteObjects.RunTimeImplements;
 import Threads.DirectionsConnection;
 import Threads.DownloadConnection;
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import utils.Utils;
+import static utils.Utils.readClientFile;
 
 /**
  *
@@ -82,70 +85,107 @@ public class ClientPeer {
         }
         
         
-            File f = new File();
-            f.setName("file1");
             Register r = new Register();
             r.setFiles(fls);
             r.setTypeRegister(enumTypeRegister.REGISTER);
             r.setIpClient(getIpLocal());
 
             interRegistry.register(r);
-        /*
-        Register r = new Register();
-        
-            r.setFile(files.get(2));
-            r.getFile().setState(enumStateFile.COMPLETE);
-            r.setTypeRegister(enumTypeRegister.UPDATE);
-            r.setIpClient(getIpLocal());
-            
-            interRegistry.register(r);
-        */
-    }
+     }
     
     
    
     
     private void uploadFiles(){
     
-        File f = new File();
-        f.setName("file1");
-        f.setState(enumStateFile.COMPLETE);
-        this.files.add(f);
-        
-        f = new File();
-        f.setName("file2");
-        f.setState(enumStateFile.COMPLETE);
-        this.files.add(f);
-        
-        f = new File();
-        f.setName("file3");
-        f.setState(enumStateFile.INCOMPLETE);
-        this.files.add(f);
+        ArrayList<String> names = new ArrayList<String>();
+
+        try {
+        names = Utils.readClientFile("cliente.txt");
+            
+        } catch (Exception e) {
+            System.out.println("error cargando archivos");
+        }
+	
+        files.clear();
+        for (String s: names) {
+            File f = new File();
+            f.setName(s);
+            f.setState(enumStateFile.COMPLETE);
+            this.files.add(f);
+            System.out.println("comprobando ... "+s);
+        }
         
         home.updateFiles(files);
         
+        
+        //subir el servicio de descarga
+       /*DownloadConnection dc= new DownloadConnection(null, null);
+       dc.start();;
+        */
     }
     
     public void start() throws NotBoundException, Exception{
+        System.out.println("anser request .........");
         answerRequest();
     }
+    
     
     private void answerRequest(){
         
         try {
           
-             new DirectionsConnection(new ArrayList<>(), ipServer)
+            DirectionsConnection dc= new DirectionsConnection(new ArrayList<>(), ipServer)
                     //System.out.println(getDirectionsToFile("file1").toString()+"RunTime xd xd ");
-;
+;   
+              // System.out.println(dc.getDirectionsToFile(ipLocal));
             
         } catch (Exception ex) {
             Logger.getLogger(ClientPeer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+    public void downloadFile(String file){
+        
+        DirectionsConnection dc= new DirectionsConnection(new ArrayList<>(), ipServer);
+        List<String> datos=new  ArrayList<String>();
+        try {
+            datos =Utils.readClientFile(file);
+        } catch(Exception e){
+            System.out.println("error leyendo archivo client");
+        }
+        
+        for(String l:datos){
+            String archivo=l.split("-")[0];
+            String linea=l.split("-")[1];
+            archivo=archivo.substring(0,archivo.length()-4);
+            List<Peer> peers=null;
+            try {
+            peers=dc.getDirectionsToFile(archivo);
+            } catch (Exception e){
+                System.out.println("Error obteniendo peers");
+            }
+            for (Peer p:peers){
+          //      System.out.println("peer "+p.getIp());
+                try {
+                    
+                String res=  new DownloadConnection(p, null).download(archivo, Integer.valueOf(linea));
+                    System.out.println("respuesta--->"+res);
+                    Utils.writeFile("archivo", Integer.valueOf(linea), res);
+                    
+                } catch (Exception e) {
+                    System.out.println("error download"+e);
+                }
+            }
+            
+        }
+        //dc.getDirectionsToFile(file);
+        
+    }
     private void init() throws RemoteException{
         myRegistry = LocateRegistry.createRegistry(888); 
         myRegistry.rebind("RunTime", new RunTimeImplements(this));
+        myRegistry.rebind("File", new FileImplements(this));
         System.out.println("Client Interface On...!!!");
         uploadFiles();    
     }
