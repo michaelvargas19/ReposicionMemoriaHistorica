@@ -50,6 +50,7 @@ public class DownloadPieceConnection extends Thread{
         
         try {
             peers = getDirectionsToFile(nameFile);
+            System.out.println("sssssssssssss  "+peers.get(0).getIp());
             boolean done = false;
             for(Peer p : peers){
                 Piece piece = this.downLoadData(p);

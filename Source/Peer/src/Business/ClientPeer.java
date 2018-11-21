@@ -53,8 +53,10 @@ public class ClientPeer {
             this.home = home;
             this.files = new ArrayList<File>();
             try {
-            this.ipServer = "192.168.0.17";
+            this.ipServer = "10.192.101.31";
             this.ipLocal = getLocalIp();
+            
+            System.setProperty("java.rmi.server.hostname","10.192.101.21");
             registryPeer = LocateRegistry.createRegistry(888);
             registryPeer.rebind("RunTime", new RunTimeImplements(this));
             registryPeer.rebind("File", new FileImplements(this));
@@ -78,7 +80,7 @@ public class ClientPeer {
         InetAddress ip;
         ip = InetAddress.getLocalHost();
         //return ip.getHostAddress();
-        return "192.168.0.17";
+        return "10.192.101.21";
         
     }
     

@@ -51,6 +51,9 @@ public class Tracker {
         try{
             //RegistryImplements registry = new RegistryImplements();
             //InterfaceRegistry  Iregistry = (InterfaceRegistry) UnicastRemoteObject.exportObject(registry,0);
+            
+            System.setProperty("java.rmi.server.hostname","10.192.101.21");
+            
             myRegistry = LocateRegistry.createRegistry(777); 
             
             
