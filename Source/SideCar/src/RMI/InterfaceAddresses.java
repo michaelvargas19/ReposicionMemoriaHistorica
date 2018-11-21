@@ -17,7 +17,9 @@ import java.util.List;
 public interface InterfaceAddresses extends Remote{
     
     public List<Peer> addressesToFile(String nameFile) throws Exception;
-    
+
+    public List<Peer> allAddresses() throws Exception;
+
     public boolean updateStateUser(String nameFile,enumStateFile satateFile) throws Exception;
     
 }

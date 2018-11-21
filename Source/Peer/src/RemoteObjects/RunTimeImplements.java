@@ -5,7 +5,7 @@
  */
 package RemoteObjects;
 
-import Model.ClientPeer;
+import Business.ClientPeer;
 import RMI.InterfaceRunTime;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

@@ -18,6 +18,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +34,12 @@ public class Tracker {
     private Map<Peer,enumStateSwarm> swarm;
     private Map<String, Map<Peer,enumStateUser> > mapFiles;
     private Registry myRegistry;
+    private Map<String,Peer> mapCache;
 
     public Tracker(Home home){
         this.mapFiles = new HashMap<>();
         this.swarm = new HashMap<>();
+        this.mapCache = new HashMap<>();        
         this.home = home;
         init();
 
@@ -122,10 +125,21 @@ public class Tracker {
             
         Map<Peer, enumStateUser> map = (Map<Peer, enumStateUser>) mapFiles.get(register.getFile().getName());
             
-        if(map == null)
-            return false;
-        
-        //System.out.println(register.getFile().getName()+ "--"+ p);
+            if (map == null) {
+                Map<Peer, enumStateUser> map2 = new HashMap<Peer, enumStateUser>();
+
+                Peer peer = new Peer();
+                
+                peer.setIp(register.getIpClient());
+                map2.put(peer, enumStateUser.SEED);
+                
+                mapFiles.put(register.getFile().getName(), map2);
+
+                home.updateFiles(mapFiles);
+
+                return false;
+        }
+        System.out.println(register.getFile().getName()+ "--"+ p);
                 
         if(register.getFile().getState() == enumStateFile.COMPLETE){
             map.replace(p,enumStateUser.SEED );
@@ -185,6 +199,18 @@ public class Tracker {
             
     }
         System.out.println("Directions had sended to File -->> "+nameFile);
+        
+        Collections.shuffle(peers);
+        return peers;
+    }
+    
+    public List<Peer> getPeersToShare(){
+        
+    List<Peer> peers = new ArrayList<Peer> ();
+    for (Map.Entry<Peer, enumStateSwarm > entry : swarm.entrySet()) {
+        peers.add(entry.getKey());
+    }
+        
         return peers;
     }
     

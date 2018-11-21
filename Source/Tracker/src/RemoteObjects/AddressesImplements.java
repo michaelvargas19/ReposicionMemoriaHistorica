@@ -36,6 +36,11 @@ public class AddressesImplements extends UnicastRemoteObject implements Interfac
     public boolean updateStateUser(String nameFile, enumStateFile satateFile) throws Exception {
         return true;
     }
+
+    @Override
+    public List<Peer> allAddresses() throws Exception {
+        return tracker.getPeersToShare();
+    }
     
     
 }

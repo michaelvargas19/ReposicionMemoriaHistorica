@@ -162,13 +162,12 @@ public class Home extends java.awt.Frame {
     
     
     public void updatePeers(List<Peer> swarm) {
-
-        //JOptionPane.showMessageDialog(this, swarm.size());
         
         vaciarModelo(this.modelPeers);
         
         for (Peer p : swarm) {           
-            String [] datos={p.getIp(),""};
+            
+            String [] datos={p.getIp(),tracker.getSwarm().get(p).toString()};
             this.modelPeers.addRow(datos);
         }
 

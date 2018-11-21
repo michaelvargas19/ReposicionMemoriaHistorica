@@ -7,6 +7,7 @@ package RMI;
 
 import Model.Piece;
 import java.rmi.Remote;
+import java.util.List;
 
 /**
  *
@@ -18,5 +19,5 @@ public interface InterfaceFile  extends Remote{
     
     public Piece exchangesPiece(String namePiece, int n, int []changes ) throws Exception;
     
-    
+    public boolean receiveFile(List<String> datas,String path, String name) throws Exception;
 }
